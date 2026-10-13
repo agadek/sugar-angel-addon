@@ -1,0 +1,54 @@
+# The Sugar Angel add-on, as Home Assistant's Supervisor reads it.
+name: Sugar Angel
+# Must equal the tag of the published image and its io.hass.version label.
+version: "0.1.0"
+slug: sugar_angel
+description: >-
+  Diabetes support for one person on insulin pens: Glucose readings from
+  Dexcom, a Logbook and a glucose Forecast. A proof of concept, not a medical
+  device.
+url: https://github.com/agadek/sugar-angel-addon
+arch:
+  - aarch64
+# Prebuilt and public; the Supervisor pulls <image>:<version>.
+image: ghcr.io/agadek/sugar-angel-addon
+
+# s6-overlay is process 1 in the image, so Docker's own init must stay out.
+init: false
+startup: application
+boot: auto
+# Seconds the container gets to stop: the service first, then PostgreSQL.
+timeout: 30
+
+ports:
+  8787/tcp: 8787
+  # PostgreSQL. No host port unless the person gives it one.
+  5432/tcp: null
+ports_description:
+  8787/tcp: The web app and the API (plain HTTP)
+  5432/tcp: PostgreSQL, for debugging; needs db_password, not encrypted
+webui: "http://[HOST]:[PORT:8787]/"
+watchdog: "http://[HOST]:[PORT:8787]/health"
+
+# Before a backup the add-on writes a dump of its database into
+# /data/backup; the raw database files stay out of the backup.
+backup: hot
+backup_pre: sugar-angel-backup
+backup_exclude:
+  - pgdata
+  - pgdata.new
+
+# No option has a secret default. api_token has no default at all: the
+# Supervisor refuses to start the add-on until it is set.
+options:
+  dexcom_region: OUS
+  poll_interval_seconds: 300
+  log_level: info,sqlx=warn
+schema:
+  api_token: password(16,)
+  dexcom_username: str?
+  dexcom_password: password?
+  dexcom_region: list(OUS|US)
+  poll_interval_seconds: int(1,)
+  log_level: str
+  db_password: password?

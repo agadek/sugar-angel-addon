@@ -1,0 +1,39 @@
+configuration:
+  api_token:
+    name: API token
+    description: >-
+      Required, at least 16 characters. The one secret that protects the web
+      app and the API; you type it into the web app once on each device. Use a
+      long random value.
+  dexcom_username:
+    name: Dexcom username
+    description: >-
+      The Dexcom account whose Glucose readings are fetched through Dexcom
+      Share. Leave empty to run without fetching Glucose readings.
+  dexcom_password:
+    name: Dexcom password
+    description: The password of that Dexcom account.
+  dexcom_region:
+    name: Dexcom region
+    description: US for an account made in the United States, OUS for anywhere else.
+  poll_interval_seconds:
+    name: Poll interval (seconds)
+    description: >-
+      How often to ask Dexcom for new Glucose readings. Dexcom has a new one
+      every 5 minutes, so 300 is a good value.
+  log_level:
+    name: Log level
+    description: >-
+      How much the service writes to the add-on's log. The default is
+      "info,sqlx=warn"; use "debug,sqlx=warn" when looking for a problem.
+  db_password:
+    name: Database password (debugging)
+    description: >-
+      Leave empty in normal use. When set, and when port 5432 is given a host
+      port under Network, the logins sugar_readonly and sugar_admin can reach
+      the database with this password. Connections are not encrypted.
+network:
+  8787/tcp: The web app and the API (plain HTTP, protected by the API token)
+  5432/tcp: >-
+    PostgreSQL, for debugging. Leave empty in normal use; it also needs the
+    database password option. Not encrypted.
