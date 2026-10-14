@@ -148,7 +148,7 @@ Everything the add-on writes is on its **Log** tab: the start-up steps, the serv
 | The web app keeps asking for the token | The token typed does not match the API token option. |
 | No Glucose readings arrive | Check the Dexcom username, password and region, then the log. With no Dexcom account set, nothing is fetched. |
 | The Home screen says there is no Forecast | Train it from the Settings screen. It needs about a day of Glucose readings. |
-| The add-on will not start; the log says an option `openai_compatible_…` must be set or is wrong | With the OpenAI-compatible key set, the address (starting with `http://` or `https://`) and the model are required, and the name, if given, must be lowercase letters, digits and dashes. Fix it, or clear the key. |
+| The OpenAI-compatible service gives no proposals; the Log tab has an error line about `OPENAI_COMPATIBLE_…` | With its key set, the address (starting with `http://` or `https://`) and the model are required, and the name, if given, must be lowercase letters, digits and dashes. The add-on keeps running without that service until it is fixed or the key cleared. |
 | The Estimate button is greyed out | No provider's key is set. See [Meal estimates](#meal-estimates). |
 | An estimate says the provider is busy, out of quota or the key was refused | Busy: try again in a moment. Quota: wait for the free tier's daily limit to reset, or add credit. Refused key: check the key on the Configuration tab. |
 | The add-on stops by itself | When the service or the database fails five times within two minutes the add-on stops instead of running half-broken. The Log tab has the reason. |
