@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.3.0
+
+**Before updating, make a Home Assistant backup that includes this add-on** (the update dialog offers one). This version changes the database twice, and going back to an older version afterwards means restoring that backup:
+
+- Insulin sensitivity and Carb ratio are now kept in time-of-day blocks. Your current figures become one block covering the whole day, and the old single-value columns are removed; tests check that nothing is lost.
+- New tables for Calibration's proposals and the history of your values. They only add; nothing already stored changes.
+
+**After updating, train the Forecast again** (Settings > Forecast > Train the forecast): it now forecasts every 15 minutes up to 4 hours ahead, and the old trained Forecast is not used.
+
+- Forecast: every 15 minutes from 15 minutes to 4 hours ahead, drawn on Home as a dashed line with a dot every half hour.
+- Home: under the graph, "Carbohydrates absorbing" and "Insulin acting" show each Meal and Dose as a curve over its whole span, into the hours ahead, with the totals on board. A Basal is hatched, a Planned Meal hollow.
+- Home: Today's Meals, the sums of what you have eaten since midnight (carbohydrates as a span, energy, fat, sugars, fibre, protein, salt), below the log buttons.
+- Settings: Insulin sensitivity and Carb ratio can differ by time of day ("Split the day"); the blocks' times are your phone's local time, stored when you save them. One block covering the day works as before.
+- Forecast research, not yet visible in the web app: a back-test bench that scores each Forecast method on your stored data, and a second method in the style of OpenAPS and Loop, which needs Insulin sensitivity and Carb ratio.
+- Calibration, not yet visible in the web app: the store for proposals to change your figures, which change nothing until you accept them, and the history of every change to Insulin sensitivity, Carb ratio and Action profiles, including your own edits.
+
 ## 0.2.0
 
 **Before updating, make a Home Assistant backup that includes this add-on** (the update dialog offers one). This version adds one change to the database (Nutrients on Meals): it only adds optional columns, and everything already stored is kept as it is.

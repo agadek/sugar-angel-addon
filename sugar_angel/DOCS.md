@@ -1,6 +1,6 @@
 # Sugar Angel
 
-Sugar Angel supports one person who manages diabetes with insulin pens. It fetches Glucose readings from a Dexcom continuous glucose monitor, keeps a Logbook of Meals, Doses and Activities that you enter in a web app, and shows a Forecast of glucose 30, 60 and 90 minutes ahead.
+Sugar Angel supports one person who manages diabetes with insulin pens. It fetches Glucose readings from a Dexcom continuous glucose monitor, keeps a Logbook of Meals, Doses and Activities that you enter in a web app, and shows a Forecast of glucose every 15 minutes up to 4 hours ahead.
 
 **This is a proof of concept. It is not a medical device.** Nothing it shows has been tested or approved for treatment decisions. The Forecast is an experiment trained on your own data and can be wrong, sometimes by a lot. Decide about insulin and food the way you and your care team have agreed, with your glucose monitor and meter.
 
