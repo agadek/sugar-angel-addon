@@ -45,8 +45,17 @@ Optional settings that are empty may be hidden: switch on "Show unused optional 
 | **Poll interval** (`poll_interval_seconds`) | How often to ask Dexcom for new Glucose readings, in seconds. The default is 300; Dexcom has a new one every 5 minutes. |
 | **Log level** (`log_level`) | How much the service writes to the log. The default is `info,sqlx=warn`. Use `debug,sqlx=warn` when looking for a problem. |
 | **Database password** (`db_password`) | Leave it empty in normal use. See [The database port](#the-database-port-for-debugging). |
+| **Claude API key** (`anthropic_api_key`) | Optional. Lets Claude propose Meal estimates. See [Meal estimates](#meal-estimates). |
+| **Claude model** (`anthropic_model`) | Optional. Leave it empty for the service's default. |
+| **Gemini API key** (`gemini_api_key`) | Optional. Lets Gemini propose Meal estimates. |
+| **Gemini model** (`gemini_model`) | Optional. Leave it empty for the service's default. |
+| **Gemini fallback model** (`gemini_fallback_model`) | Optional. Asked when the Gemini model is busy. Leave it empty for the service's default, or write `off` to ask the same model once more instead. |
+| **OpenAI-compatible API key** (`openai_compatible_api_key`) | Optional. Lets a service such as Groq, OpenRouter, Mistral or OpenAI propose Meal estimates. With it, the address and the model are required. |
+| **OpenAI-compatible address** (`openai_compatible_base_url`) | That service's address, for Groq `https://api.groq.com/openai/v1`. |
+| **OpenAI-compatible model** (`openai_compatible_model`) | The model to ask there, for Groq for example `openai/gpt-oss-20b`. |
+| **OpenAI-compatible name** (`openai_compatible_name`) | Optional. What its proposals are labelled with, for example `groq`: lowercase letters, digits and dashes. Leave it empty for `openai-compatible`. |
 
-Home Assistant keeps these values, including the API token and both passwords, in its own storage and in every backup that includes the add-on.
+Home Assistant keeps these values, including the API token, both passwords and the API keys, in its own storage and in every backup that includes the add-on.
 
 ## The Forecast
 
@@ -56,6 +65,32 @@ To train it, open the web app's **Settings** screen, go to the **Forecast** sect
 
 The Forecast is hidden when the latest Glucose reading is more than 15 minutes old or when readings are missing.
 
+## Meal estimates
+
+When you log a Meal, the web app's **Estimate** button can ask an AI service for a proposal from the Meal's description, for example "two slices of wholemeal toast with butter and a banana": a span of carbohydrates, how fast they are absorbed, the nutrients and a short explanation. It is only a proposal. Nothing counts until you have read it, changed what you disagree with and saved the Meal yourself. The service can be wrong, and it cannot see the food.
+
+Only the description you type is sent, together with the fixed instructions for the service. No Glucose readings, Doses, other Logbook entries or anything about you are sent.
+
+Meal estimates are off until you set at least one key. Without a key the Estimate button is shown greyed out, with a line saying that no provider's key is set. With more than one key, every service set up is asked at once and the proposals are shown side by side.
+
+| Provider | Where to get a key | Cost |
+|---|---|---|
+| **Gemini** (Google) | Google AI Studio (aistudio.google.com), "Get API key". | A free tier with a daily limit, plenty for one person's meals. **On the free tier Google may use the meal descriptions to improve its products**, and people at Google may read them. Use a paid key if you do not want that. |
+| **Claude** (Anthropic) | The Anthropic Console (console.anthropic.com), after adding credit. | Paid per use. Each estimate is a small request; a month of meals costs little, but not nothing. |
+| **OpenAI-compatible** | For Groq: the Groq console (console.groq.com), "API Keys". Other services such as OpenRouter, Mistral or OpenAI have their own. | Groq has a free tier with limits; others vary from free tiers to pay per use. Check the service's own terms on what it may do with what is sent. |
+
+To set one up:
+
+1. Get a key from the provider (table above).
+2. On the add-on's **Configuration** tab, switch on "Show unused optional configuration options" and paste the key into its option. For an OpenAI-compatible service also set its address and model; for Groq the address is `https://api.groq.com/openai/v1` and a model is `openai/gpt-oss-20b`. The model must support structured answers (`response_format` `json_schema` with `strict`).
+3. Save and restart the add-on. The Log tab then says which providers will be asked, never the key.
+
+Leave the model options empty unless you have a reason: the service then uses its own default, and a newer default arrives with an update of the add-on.
+
+When a service is busy, it is asked once more after a short pause. Gemini instead asks its fallback model straight away, a lighter model on the same key. If it is still busy, the proposal says so; try again in a moment. A key that is wrong, out of credit or over its free limit gives a clear message in place of that provider's proposal; the other providers still answer.
+
+The keys are options like the others: Home Assistant keeps them in its storage and in every backup that includes the add-on, so they are protected the same way as the API token. To stop using a provider, clear its key and restart.
+
 ## Backups
 
 The add-on does not back itself up. **Include it in Home Assistant's backups** (Settings > System > Backups: make sure the automatic backup covers add-ons, or select Sugar Angel when you make a backup by hand). Keep copies somewhere other than the Home Assistant machine: its storage is the likeliest thing to fail.
@@ -63,7 +98,7 @@ The add-on does not back itself up. **Include it in Home Assistant's backups** (
 What happens when Home Assistant makes a backup:
 
 - Just before, the add-on writes a fresh dump of its whole database (Glucose readings, the Logbook, Insulins and Settings). If writing the dump fails, the backup of this add-on fails too, and the Log tab says why.
-- The backup then holds that dump, the trained Forecast and the add-on's options. **The options include the API token and the Dexcom password**, so treat a backup as a secret and keep Home Assistant's backup encryption on.
+- The backup then holds that dump, the trained Forecast and the add-on's options. **The options include the API token, the Dexcom password and any API keys for Meal estimates**, so treat a backup as a secret and keep Home Assistant's backup encryption on.
 - The raw database files are left out on purpose. They cannot be copied safely while the database is running, and the dump replaces them.
 
 What a restore does: Home Assistant stops the add-on, puts back the options and data from the backup, and starts it again. The add-on finds no database files, creates a new database and loads the dump. Everything logged or fetched after that backup is gone. Dexcom only gives back the last 24 hours of Glucose readings. The first start after a restore takes longer than usual; the Log tab shows "loading the dump".
@@ -113,6 +148,9 @@ Everything the add-on writes is on its **Log** tab: the start-up steps, the serv
 | The web app keeps asking for the token | The token typed does not match the API token option. |
 | No Glucose readings arrive | Check the Dexcom username, password and region, then the log. With no Dexcom account set, nothing is fetched. |
 | The Home screen says there is no Forecast | Train it from the Settings screen. It needs about a day of Glucose readings. |
+| The add-on will not start; the log says an option `openai_compatible_…` must be set or is wrong | With the OpenAI-compatible key set, the address (starting with `http://` or `https://`) and the model are required, and the name, if given, must be lowercase letters, digits and dashes. Fix it, or clear the key. |
+| The Estimate button is greyed out | No provider's key is set. See [Meal estimates](#meal-estimates). |
+| An estimate says the provider is busy, out of quota or the key was refused | Busy: try again in a moment. Quota: wait for the free tier's daily limit to reset, or add credit. Refused key: check the key on the Configuration tab. |
 | The add-on stops by itself | When the service or the database fails five times within two minutes the add-on stops instead of running half-broken. The Log tab has the reason. |
 
 ## About

@@ -32,6 +32,60 @@ configuration:
       Leave empty in normal use. When set, and when port 5432 is given a host
       port under Network, the logins sugar_readonly and sugar_admin can reach
       the database with this password. Connections are not encrypted.
+  anthropic_api_key:
+    name: Claude API key (Meal estimates)
+    description: >-
+      Optional. A key from the Anthropic Console lets Claude propose the
+      carbohydrates of a Meal from its description; paid per use. Only the
+      description is sent. Leave empty and Claude is not asked.
+  anthropic_model:
+    name: Claude model
+    description: >-
+      Optional. Leave empty for the service's default model, which follows
+      new versions of the add-on.
+  gemini_api_key:
+    name: Gemini API key (Meal estimates)
+    description: >-
+      Optional. A key from Google AI Studio lets Gemini propose the
+      carbohydrates of a Meal from its description. The free tier works within
+      its daily limits, but on the free tier Google may use the meal
+      descriptions to improve its products. Leave empty and Gemini is not
+      asked.
+  gemini_model:
+    name: Gemini model
+    description: >-
+      Optional. Leave empty for the service's default model, which follows
+      new versions of the add-on.
+  gemini_fallback_model:
+    name: Gemini fallback model
+    description: >-
+      Optional. Asked at once when the Gemini model is busy. Leave empty for
+      the service's default, or write "off" to ask the same model once more
+      instead.
+  openai_compatible_api_key:
+    name: OpenAI-compatible API key (Meal estimates)
+    description: >-
+      Optional. A key for a service that speaks OpenAI's chat-completions
+      format, such as Groq, OpenRouter, Mistral or OpenAI itself. With it, the
+      address and the model below are required. Leave empty and no such
+      service is asked.
+  openai_compatible_base_url:
+    name: OpenAI-compatible address
+    description: >-
+      The service's address, starting with http:// or https://; for Groq
+      https://api.groq.com/openai/v1. Needed only with the key above.
+  openai_compatible_model:
+    name: OpenAI-compatible model
+    description: >-
+      The model to ask, for Groq for example openai/gpt-oss-20b. It must
+      support structured answers (response_format json_schema, strict).
+      Needed only with the key above.
+  openai_compatible_name:
+    name: OpenAI-compatible name
+    description: >-
+      Optional. What its proposals are labelled with in the web app, for
+      example groq: lowercase letters, digits and dashes, starting with a
+      letter, not claude or gemini. Leave empty for "openai-compatible".
 network:
   8787/tcp: The web app and the API (plain HTTP, protected by the API token)
   5432/tcp: >-

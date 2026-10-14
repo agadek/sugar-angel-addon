@@ -39,7 +39,9 @@ backup_exclude:
   - pgdata.new
 
 # No option has a secret default. api_token has no default at all: the
-# Supervisor refuses to start the add-on until it is set.
+# Supervisor refuses to start the add-on until it is set. The Meal estimate
+# options have no defaults either: an empty model leaves the service's own
+# default in force, so a change of default reaches everyone with the image.
 options:
   dexcom_region: OUS
   poll_interval_seconds: 300
@@ -52,3 +54,12 @@ schema:
   poll_interval_seconds: int(1,)
   log_level: str
   db_password: password?
+  anthropic_api_key: password?
+  anthropic_model: str?
+  gemini_api_key: password?
+  gemini_model: str?
+  gemini_fallback_model: str?
+  openai_compatible_api_key: password?
+  openai_compatible_base_url: url?
+  openai_compatible_model: str?
+  openai_compatible_name: str?
