@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.6.0
+
+**Before updating, make a Home Assistant backup that includes this add-on** (the update dialog offers one). This version adds one change to the database: a new table where the service keeps the Forecast methods' back-test. It only adds; nothing already stored changes. Nothing to do after updating.
+
+- Home: the day's summary is now "Today" and adds the insulin taken since midnight, all units together and Boluses and Basals apart.
+- Logbook: switch between "List" (the entries) and "By day" (each day's sums of Meals, insulin and Activities). Your choice is remembered on the device. The Logbook now shows whole days.
+- Lighter on the Raspberry Pi: the back-test of the Forecast methods is kept and worked out about once a day instead of on every visit to Settings > Forecast methods ("Work out the bench again" does it now); Calibration's check is quicker when its proposals stand.
+- Home: while a fat-and-protein variant is the active method, the carbohydrates lane shows each Meal's fat and protein as it is counted.
+- Error messages are written for a person and shown beside the field they are about.
+
 ## 0.5.0
 
 No database changes since 0.4.0; a backup before updating is still a good habit. Nothing to do after updating.
