@@ -1,7 +1,7 @@
 # The Sugar Angel add-on, as Home Assistant's Supervisor reads it.
 name: Sugar Angel
 # Must equal the tag of the published image and its io.hass.version label.
-version: "0.4.0"
+version: "0.5.0"
 slug: sugar_angel
 description: >-
   Diabetes support for one person on insulin pens: Glucose readings from

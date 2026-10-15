@@ -59,7 +59,7 @@ Home Assistant keeps these values, including the API token, both passwords and t
 
 ## The Forecast
 
-Several Forecast methods run side by side: a ridge regression trained on your own data, a physiological method in the style of OpenAPS and Loop (it needs your Insulin sensitivity and Carb ratio in Settings), and "flat", which assumes glucose stays where it is. Home draws them all; the active one stands out, with a shaded band covering about 80% of its past errors. You choose the active method in **Settings > Forecast methods**, where each method's scores are shown side by side; it never changes by itself.
+Several Forecast methods run side by side: a ridge regression trained on your own data, a physiological method in the style of OpenAPS and Loop (it needs your Insulin sensitivity and Carb ratio in Settings), and "flat", which assumes glucose stays where it is. Four more are variants of the first two that also count fat and protein, by the Warsaw method and by Dr Bernstein's; they only differ for Meals logged with fat or protein, and Home keeps them hidden until you show one. Home draws them all; the active one stands out, with a shaded band covering about 80% of its past errors. You choose the active method in **Settings > Forecast methods**, where each method's scores are shown side by side; it never changes by itself.
 
 The ridge regression trains itself once there is about a day of Glucose readings, again every day and after a gap in the readings; **Train the forecast** in Settings still trains it at once. Every forecast is recorded and scored when the real readings arrive, so the scores reflect how each method has actually done.
 

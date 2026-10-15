@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.5.0
+
+No database changes since 0.4.0; a backup before updating is still a good habit. Nothing to do after updating.
+
+- Forecast: four new methods that count fat and protein, by the Warsaw method (fat-protein units) and by Dr Bernstein's (a share of the protein), each added to the physiological method and to the ridge regression. They only make a difference for Meals logged with fat or protein. They are scored beside the others in Settings > Forecast methods and can be chosen as the active method; on Home they are hidden under "Fat and protein variants" until you show one.
+- Log an Activity: Moderate intensity is preselected, and Save stays in sight on a small phone.
+- Log a Dose: the form shows at once and fills in the Insulin when it arrives.
+- Settings asks before you leave with unsaved changes, and "Forget this device" asks once more.
+- Durations of Action profiles read in hours where that helps (for example 24 h).
+- Home: the latest reading's value stands on a line from its point; the band shows better in dark mode; the Calibration line keeps up while Home is open.
+
 ## 0.4.0
 
 **Before updating, make a Home Assistant backup that includes this add-on** (the update dialog offers one). This version adds five changes to the database; each only adds new tables or an optional column, and nothing already stored changes.
