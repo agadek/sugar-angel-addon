@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0
+
+**Before updating, make a Home Assistant backup that includes this add-on** (the update dialog offers one). This version adds five changes to the database; each only adds new tables or an optional column, and nothing already stored changes.
+
+Nothing to do after updating: the Forecast trains itself, and Calibration makes its first check straight away.
+
+- Forecast: three methods side by side on Home (ridge regression, a physiological method like OpenAPS and Loop, and flat). The active one is drawn with a band covering about 80% of its past errors; the others are lighter, each with its own line and marker, and can be hidden.
+- Settings > Forecast methods: each method's scores from the last 1, 7 or 14 days beside its back-test, Lows warned of in time, false warnings, a recommendation with its rule, and your choice of the active method. The ridge regression stays active until you choose.
+- Every forecast is recorded and scored when the readings arrive (kept 28 days). The Forecast trains itself daily and after a gap in the readings.
+- Home's "Insulin acting" lane follows the active method's insulin curve.
+- Calibration: proposals for Insulin sensitivity, Carb ratio and rapid-acting Insulins' Action profiles from the last 3, 7 and 14 days, each with its evidence; starting values from your total daily dose (new in Settings) while they are not set. Accept, adjust or dismiss them in Settings > Calibration; nothing changes until you do. Once a week by itself, or with "Check my ratios". Home shows a line while a proposal waits.
+
 ## 0.3.0
 
 **Before updating, make a Home Assistant backup that includes this add-on** (the update dialog offers one). This version changes the database twice, and going back to an older version afterwards means restoring that backup:

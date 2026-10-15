@@ -59,11 +59,15 @@ Home Assistant keeps these values, including the API token, both passwords and t
 
 ## The Forecast
 
-There is no Forecast until it has been trained, and training needs about a day of Glucose readings. Until then the Home screen says there is no Forecast.
+Several Forecast methods run side by side: a ridge regression trained on your own data, a physiological method in the style of OpenAPS and Loop (it needs your Insulin sensitivity and Carb ratio in Settings), and "flat", which assumes glucose stays where it is. Home draws them all; the active one stands out, with a shaded band covering about 80% of its past errors. You choose the active method in **Settings > Forecast methods**, where each method's scores are shown side by side; it never changes by itself.
 
-To train it, open the web app's **Settings** screen, go to the **Forecast** section and press **Train the forecast**. The web app uses the result straight away; no restart is needed. Train it again now and then as more of your data comes in. After an update the add-on may say that the Forecast must be trained again; do it the same way.
+The ridge regression trains itself once there is about a day of Glucose readings, again every day and after a gap in the readings; **Train the forecast** in Settings still trains it at once. Every forecast is recorded and scored when the real readings arrive, so the scores reflect how each method has actually done.
 
-The Forecast is hidden when the latest Glucose reading is more than 15 minutes old or when readings are missing.
+The Forecast is hidden when the latest Glucose reading is more than 15 minutes old.
+
+## Calibration
+
+Calibration proposes changes to your Insulin sensitivity, Carb ratio and Action profiles from your logged Meals, Boluses and readings, and starting values from your total daily dose while they are not set. It runs once a week by itself and when you press **Check my ratios** in **Settings > Calibration**. A proposal changes nothing until you accept or adjust it; you can dismiss it. Home shows one line while a proposal waits. Proposals are an experiment like the Forecast: check them with your care team.
 
 ## Meal estimates
 
@@ -147,7 +151,7 @@ Everything the add-on writes is on its **Log** tab: the start-up steps, the serv
 | The log says `the option api_token is empty` | The same. |
 | The web app keeps asking for the token | The token typed does not match the API token option. |
 | No Glucose readings arrive | Check the Dexcom username, password and region, then the log. With no Dexcom account set, nothing is fetched. |
-| The Home screen says there is no Forecast | Train it from the Settings screen. It needs about a day of Glucose readings. |
+| The Home screen says there is no Forecast | It trains itself once there is about a day of Glucose readings; you can also train it from the Settings screen. The physiological method needs Insulin sensitivity and Carb ratio in Settings. |
 | The OpenAI-compatible service gives no proposals; the Log tab has an error line about `OPENAI_COMPATIBLE_…` | With its key set, the address (starting with `http://` or `https://`) and the model are required, and the name, if given, must be lowercase letters, digits and dashes. The add-on keeps running without that service until it is fixed or the key cleared. |
 | The Estimate button is greyed out | No provider's key is set. See [Meal estimates](#meal-estimates). |
 | An estimate says the provider is busy, out of quota or the key was refused | Busy: try again in a moment. Quota: wait for the free tier's daily limit to reset, or add credit. Refused key: check the key on the Configuration tab. |
